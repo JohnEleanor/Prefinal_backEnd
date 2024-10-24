@@ -31,7 +31,7 @@ Class User {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$username]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result > 1){
+        if ($result >= 1){
             $data = [
                 "status" => "error",
                 "message" => "Username already exists"
@@ -57,10 +57,32 @@ Class User {
         return $result;
     }
 
-    public function updateUser($data) {
+    public function getUserByid($id) {
+        $sql = "SELECT * FROM users WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($result){
+            $data = [
+                "status" => "success",
+                "message" => "Get User Success",
+                "data" => $result
+            ];
+            return $data;
+        }else {
+            $data = [
+                "status" => "error",
+                "message" => "User not found"
+            ];
+            return $data;
+        }
+        return $result;
+    }
+
+    public function updateUser($data, $id) {
         $sql = "UPDATE users SET username = ?, password = ?, email = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$data["username"], $data["password"], $data["email"], $data["id"]]);
+        $stmt->execute([$data["username"], $data["password"], $data["email"], $id]);
         $data = [
             "status" => "success",
             "message" => "Update Success"
@@ -69,7 +91,7 @@ Class User {
     }
 
     public function deleteUser($id) {
-        $sql = "DELETE FROM users WHERE id = ?, name = ?";
+        $sql = "DELETE FROM users WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
         $data = [
