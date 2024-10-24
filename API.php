@@ -34,10 +34,10 @@ if ($method == "GET") {
     // ส่วนของ province
     if (isset($decode_uri[3]) && $decode_uri[3] == "province") {
         if (isset($decode_uri[4])) {
-            $result = $postmanObj->getProvince($decode_uri[4]);
+            $result = $postmanObj->showsubdistrict($decode_uri[4]);
             print(json_encode($result));
         }else {
-            $result = $postmanObj->getAllProvince();
+            $result = $postmanObj->listProvince();
             print(json_encode($result));
         }
     }
@@ -103,7 +103,6 @@ elseif ($method == "POST") {
         echo "Not Found";
     }
 }
-
 
 
 
